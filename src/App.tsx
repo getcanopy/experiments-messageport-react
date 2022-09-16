@@ -14,14 +14,13 @@ const PortHappyGreeting = withPort(HappyGreeting)
 
 const {port1, port2} = new MessageChannel()
 
+setInterval(() => {
+  port2.postMessage({greeting: `hello from time: ${Date.now()}`})
+}, 100)
+
 function App() {
   return (
     <div className="App">
-      <header className="App-header"> Let's control the emoji from the backend! </header>
-      <form>
-        <label> Emoji: </label>
-        <input type="text" />
-      </form>
       <PortHappyGreeting port={port1} greeting="begin"/>
     </div>
   )
