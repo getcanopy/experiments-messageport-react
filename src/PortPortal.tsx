@@ -21,14 +21,7 @@ class PortPortal extends React.Component<{ port: MessagePort, children: ReactEle
   }
   render = () => {
     const { children } = this.props
-    if (Array.isArray(children)) {
-      return <>{
-        children.map((child, key) => {
-          return React.cloneElement({ ...child, key }, this.state.props)
-        })
-      }</>
-    }
-    return React.cloneElement(children, this.state.props)
+    return React.Children.map(children, (child) => React.cloneElement(child, this.state.props))
   }
 }
 export { PortPortal }
