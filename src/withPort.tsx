@@ -1,6 +1,6 @@
 import React, { Component, ComponentType } from "react"
 
-export const withPort = (ThingToWrap: ComponentType) => {
+export const withPort = (ThingToWrap: ComponentType<any>) => {
   return class extends Component {
     port: MessagePort
     constructor(props: { port: MessagePort & any}) {

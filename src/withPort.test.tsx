@@ -12,36 +12,56 @@ test("renders learn react link", () => {
 })
 
 describe('withPort', () => {
-  let HappyEmoji: ComponentType<any>
-  beforeEach(() => {
-    HappyEmoji = ({ greeting, emoji = '😀', onClick }) => {
-      return <div onClick={onClick}>
-        <span>{emoji}</span>
-        <span>{greeting || 'no greeting'}</span>
-        <span>{emoji}</span>
-      </div>
-    }
+  describe('Given a component', () => {
+    let HappyEmoji: ComponentType<{ greeting: string, emoji?: string, onClick: () => void }>
+    beforeEach(() => {
+      HappyEmoji = ({ greeting, emoji = '😀', onClick }) => {
+        return <div onClick={onClick}>
+          <span>{emoji}</span>
+          <span>{greeting || 'no greeting'}</span>
+          <span>{emoji}</span>
+        </div>
+      }
+    })
+    describe('Given a MessagePort', () => {
+      let emojiPort
+      let backendPort
+      beforeEach(() => {
+        const { port1, port2 } = new MessageChannel()
+        emojiPort = port1
+        backendPort = port2
+      })
+      describe('When the component is wrapped with withPort', () => {
+        let PortHappyEmoji
+        beforeEach(() => {
+          PortHappyEmoji = withPort(HappyEmoji)
+        })
+        describe('When the component is rendered', () => {
+          let rendered
+          beforeEach(() => {
+            rendered = render(<PortHappyEmoji greeting='hello' onClick={() => { }} port={backendPort} />)
+          })
+          it('should render something', () => {
+            expect(rendered).toBeTruthy()
+          })
+          it('should render the wrapped component', () => {
+            expect(screen.getByText('hello')).toBeTruthy()
+          })
+        })
+      })
+    })
   })
-  it('should return something', () => {
-    const PortHappyEmoji = withPort(HappyEmoji)
-    render(<PortHappyEmoji />)
-    expect(PortHappyEmoji).toBeDefined()
-  })
-  it('should render the component with the correct greeting', () => {
-    const PortHappyEmoji = withPort(HappyEmoji)
-    const rendered = render(<PortHappyEmoji greeting='hello' />)
-    expect(rendered.container).toHaveTextContent('hello')
-  })
-
+})/*
+  describe('When I wrap it with withPort', () => {
+    let PortHappyEmoji
+    beforeEach(() => {
+      PortHappyEmoji = withPort(HappyEmoji)
+    })
   describe('Given a MessagePort', () => {
     let emojiPort
     let backendPort
 
-    beforeEach(() => {
-      const { port1, port2 } = new MessageChannel()
-      emojiPort = port1
-      backendPort = port2
-    })
+
     describe('when wrapping an element type', () => {
       let PortHappyEmoji
       beforeEach(() => {
@@ -67,3 +87,4 @@ describe('withPort', () => {
     })
   })
 })
+*/
