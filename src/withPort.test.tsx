@@ -1,7 +1,10 @@
 import React, { ComponentType } from "react"
 import { render, screen } from "@testing-library/react"
+import { MessageChannel } from 'worker_threads'
+
 import App from "./App"
-import { withPort } from "./index"
+import { withPort } from "./withPort"
+
 test("renders learn react link", () => {
   render(<App />)
   const linkElement = screen.getByText(/learn react/i)
@@ -24,12 +27,43 @@ describe('withPort', () => {
     render(<PortHappyEmoji />)
     expect(PortHappyEmoji).toBeDefined()
   })
+  it('should render the component with the correct greeting', () => {
+    const PortHappyEmoji = withPort(HappyEmoji)
+    const rendered = render(<PortHappyEmoji greeting='hello' />)
+    expect(rendered.container).toHaveTextContent('hello')
+  })
 
-  describe('When passed a "greeting" property', () => {
-    it('should render the greeting', () => {
-      const PortHappyEmoji = withPort(HappyEmoji)
-      render(<PortHappyEmoji greeting="hello" />)
-      expect(screen.getByText('hello')).toBeInTheDocument()
+  describe('Given a MessagePort', () => {
+    let emojiPort
+    let backendPort
+
+    beforeEach(() => {
+      const { port1, port2 } = new MessageChannel()
+      emojiPort = port1
+      backendPort = port2
+    })
+    describe('when wrapping an element type', () => {
+      let PortHappyEmoji
+      beforeEach(() => {
+        PortHappyEmoji = withPort(HappyEmoji)
+      })
+      describe('when rendering the wrapped element', () => {
+        let rendered
+        beforeEach(() => {
+          rendered = render(<PortHappyEmoji port={emojiPort} />)
+        })
+        it('should render the wrapped element', () => {
+          expect(rendered.container).toHaveTextContent('😀no greeting😀')
+        })
+        describe('when the backend sends a message', () => {
+          beforeEach(() => {
+            backendPort.postMessage({ greeting: 'hello' })
+          })
+          it('should update the wrapped element', () => {
+            expect(rendered.container).toHaveTextContent('😀hello😀')
+          })
+        })
+      })
     })
   })
 })
