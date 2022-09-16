@@ -5,7 +5,7 @@ import { withPort } from './withPort'
 const HappyGreeting = ({ greeting }) => {
   return <div>
     <span>😀</span>
-    <span>{greeting || 'no greeting'}</span>
+    <span>{greeting}</span>
     <span>😀</span>
   </div>
 }
