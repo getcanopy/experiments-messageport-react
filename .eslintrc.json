@@ -4,7 +4,9 @@
     "es6": true,
     "node": true
   },
-  "plugins": ["unused-imports"],
+  "plugins": [
+    "unused-imports"
+  ],
   "parser": "@typescript-eslint/parser",
   "extends": [
     "eslint:recommended",
@@ -14,11 +16,12 @@
     "plugin:import/electron",
     "plugin:import/typescript"
   ],
-
   "rules": {
     "@typescript-eslint/no-explicit-any": "off",
-    "semi": ["warn", "never"],
-    "quotes": ["warn", "double"],
+    "semi": [
+      "warn",
+      "never"
+    ],
     "unused-imports/no-unused-imports": "warn"
   }
 }
