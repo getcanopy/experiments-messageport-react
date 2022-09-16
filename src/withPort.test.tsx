@@ -38,7 +38,7 @@ describe('withPort', () => {
         let element
         beforeEach(() => {
           PortHappyEmoji = withPort(HappyEmoji)
-          element = <PortHappyEmoji emoji='😎' port={emojiPort} />
+          element = <PortHappyEmoji emoji='😎' greeting='sup bro' port={emojiPort} />
         })
         describe('When the component is rendered', () => {
           let rendered
@@ -47,8 +47,8 @@ describe('withPort', () => {
           })
           it('should render the wrapped component', () => {
             expect(rendered.container).toHaveTextContent('😎')
+            expect(rendered.container).toHaveTextContent('sup bro')
           })
-
 
           describe('when the backend sends a message', () => {
             beforeEach(async () => {
@@ -57,8 +57,23 @@ describe('withPort', () => {
                 await awaitTimeout(100)
               })
             })
-            it('should update the wrapped element', () => {
+            it('should update the element emoji', () => {
               expect(rendered.container).toHaveTextContent('⭐')
+            })
+            it('should not update the element greeting', () => {
+              expect(rendered.container).toHaveTextContent('sup bro')
+            })
+          })
+          describe('when the backend sends a different, cooler message', () => {
+            beforeEach(async () => {
+              await act(async () => {
+                backendPort.postMessage({ emoji: '🆒', greeting: 'sup sis' })
+                await awaitTimeout(100)
+              })
+            })
+            it('should update the element emoji and greeting', () => {
+              expect(rendered.container).toHaveTextContent('🆒')
+              expect(rendered.container).toHaveTextContent('sup sis')
             })
           })
         })

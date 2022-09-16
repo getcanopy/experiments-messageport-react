@@ -16,7 +16,7 @@ export const withPort = (ThingToWrap: ComponentType<any>) => {
     }
 
     handleChange = ({data:props}) => {
-      this.setState({ props: { ...this.state.props, emoji: '⭐' } })
+      this.setState({ props: { ...this.state.props, ...props } })
     }
 
     render = () => {
