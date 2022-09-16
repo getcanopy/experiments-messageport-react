@@ -24,6 +24,7 @@ describe('withPort', () => {
     render(<PortHappyEmoji />)
     expect(PortHappyEmoji).toBeDefined()
   })
+
   describe('When passed a "greeting" property', () => {
     it('should render the greeting', () => {
       const PortHappyEmoji = withPort(HappyEmoji)
