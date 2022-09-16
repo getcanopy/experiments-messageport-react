@@ -12,7 +12,7 @@ test("renders learn react link", () => {
 })
 
 describe('withPort', () => {
-  describe('Given a component', () => {
+  describe('Given an exciting emoji component', () => {
     let HappyEmoji: ComponentType<{ greeting: string, emoji?: string, onClick: () => void }>
     beforeEach(() => {
       HappyEmoji = ({ greeting, emoji = '😀', onClick }) => {
@@ -39,52 +39,22 @@ describe('withPort', () => {
         describe('When the component is rendered', () => {
           let rendered
           beforeEach(() => {
-            rendered = render(<PortHappyEmoji greeting='hello' onClick={() => { }} port={backendPort} />)
-          })
-          it('should render something', () => {
-            expect(rendered).toBeTruthy()
+            rendered = render(<PortHappyEmoji greeting='hello' port={backendPort} />)
           })
           it('should render the wrapped component', () => {
-            expect(screen.getByText('hello')).toBeTruthy()
+            expect(rendered.container).toHaveTextContent('hello')
           })
         })
       })
-    })
-  })
-})/*
-  describe('When I wrap it with withPort', () => {
-    let PortHappyEmoji
-    beforeEach(() => {
-      PortHappyEmoji = withPort(HappyEmoji)
-    })
-  describe('Given a MessagePort', () => {
-    let emojiPort
-    let backendPort
-
-
-    describe('when wrapping an element type', () => {
-      let PortHappyEmoji
-      beforeEach(() => {
-        PortHappyEmoji = withPort(HappyEmoji)
-      })
-      describe('when rendering the wrapped element', () => {
+      describe('when the backend sends a message', () => {
         let rendered
         beforeEach(() => {
-          rendered = render(<PortHappyEmoji port={emojiPort} />)
+          backendPort.postMessage({ greeting: 'hello' })
         })
-        it('should render the wrapped element', () => {
-          expect(rendered.container).toHaveTextContent('😀no greeting😀')
-        })
-        describe('when the backend sends a message', () => {
-          beforeEach(() => {
-            backendPort.postMessage({ greeting: 'hello' })
-          })
-          it('should update the wrapped element', () => {
-            expect(rendered.container).toHaveTextContent('😀hello😀')
-          })
+        it('should update the wrapped element', () => {
+          expect(rendered.container).toHaveTextContent('😀hello😀')
         })
       })
     })
   })
 })
-*/
