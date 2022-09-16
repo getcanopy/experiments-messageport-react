@@ -57,7 +57,7 @@ describe('withPort', () => {
                 await awaitTimeout(100)
               })
             })
-            it.only('should update the wrapped element', () => {
+            it('should update the wrapped element', () => {
               expect(rendered.container).toHaveTextContent('⭐')
             })
           })
