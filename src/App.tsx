@@ -1,5 +1,4 @@
 import React from 'react'
-import logo from './logo.svg'
 import './App.css'
 import { withPort } from './withPort'
 
@@ -23,7 +22,7 @@ function App() {
         <label> Emoji: </label>
         <input type="text" />
       </form>
-      <PortHappyGreeting port={port1} />
+      <PortHappyGreeting port={port1} greeting="begin"/>
     </div>
   )
 }
