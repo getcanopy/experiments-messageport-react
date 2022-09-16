@@ -1,7 +1,6 @@
 import React from 'react'
 import './App.css'
-import { withPort } from './withPort'
-
+import {PortPortal} from './PortPortal'
 const HappyGreeting = ({ greeting }) => {
   return <div>
     <span>😀</span>
@@ -10,7 +9,6 @@ const HappyGreeting = ({ greeting }) => {
   </div>
 }
 
-const PortHappyGreeting = withPort(HappyGreeting)
 
 const {port1, port2} = new MessageChannel()
 
@@ -21,7 +19,9 @@ setInterval(() => {
 function App() {
   return (
     <div className="App">
-      <PortHappyGreeting port={port1} greeting="begin"/>
+      <PortPortal port={port1}>
+        <HappyGreeting greeting='no greeting' />
+      </PortPortal>
     </div>
   )
 }
