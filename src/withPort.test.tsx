@@ -1,9 +1,11 @@
 import React, { ComponentType } from "react"
-import { render, screen } from "@testing-library/react"
-import { MessageChannel } from 'worker_threads'
+import { act, render, screen } from "@testing-library/react"
+import { MessageChannel,MessagePort } from 'worker_threads'
 
 import App from "./App"
 import { withPort } from "./withPort"
+
+const awaitTimeout = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))
 
 test("renders learn react link", () => {
   render(<App />)
@@ -13,7 +15,7 @@ test("renders learn react link", () => {
 
 describe('withPort', () => {
   describe('Given an exciting emoji component', () => {
-    let HappyEmoji: ComponentType<{ greeting: string, emoji?: string, onClick: () => void }>
+    let HappyEmoji: ComponentType<{ greeting: string, emoji: string, onClick: () => void }>
     beforeEach(() => {
       HappyEmoji = ({ greeting, emoji = '😀', onClick }) => {
         return <div onClick={onClick}>
@@ -24,8 +26,8 @@ describe('withPort', () => {
       }
     })
     describe('Given a MessagePort', () => {
-      let emojiPort
-      let backendPort
+      let emojiPort: MessagePort
+      let backendPort: MessagePort
       beforeEach(() => {
         const { port1, port2 } = new MessageChannel()
         emojiPort = port1
@@ -33,26 +35,32 @@ describe('withPort', () => {
       })
       describe('When the component is wrapped with withPort', () => {
         let PortHappyEmoji
+        let element
         beforeEach(() => {
           PortHappyEmoji = withPort(HappyEmoji)
+          element = <PortHappyEmoji emoji='😎' port={emojiPort} />
         })
         describe('When the component is rendered', () => {
           let rendered
           beforeEach(() => {
-            rendered = render(<PortHappyEmoji greeting='hello' port={backendPort} />)
+            rendered = render(element)
           })
           it('should render the wrapped component', () => {
-            expect(rendered.container).toHaveTextContent('hello')
+            expect(rendered.container).toHaveTextContent('😎')
           })
-        })
-      })
-      describe('when the backend sends a message', () => {
-        let rendered
-        beforeEach(() => {
-          backendPort.postMessage({ greeting: 'hello' })
-        })
-        it('should update the wrapped element', () => {
-          expect(rendered.container).toHaveTextContent('😀hello😀')
+
+
+          describe('when the backend sends a message', () => {
+            beforeEach(async () => {
+              await act(async () => {
+                backendPort.postMessage({ emoji: '⭐' })
+                await awaitTimeout(100)
+              })
+            })
+            it.only('should update the wrapped element', () => {
+              expect(rendered.container).toHaveTextContent('⭐')
+            })
+          })
         })
       })
     })
