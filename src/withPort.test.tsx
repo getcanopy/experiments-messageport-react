@@ -1,17 +1,9 @@
 import React, { ComponentType } from "react"
-import { act, render, screen } from "@testing-library/react"
+import { act, render } from "@testing-library/react"
 import { MessageChannel,MessagePort } from 'worker_threads'
-
-import App from "./App"
 import { withPort } from "./withPort"
 
 const awaitTimeout = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))
-
-test("renders learn react link", () => {
-  render(<App />)
-  const linkElement = screen.getByText(/learn react/i)
-  expect(linkElement).toBeInTheDocument()
-})
 
 describe('withPort', () => {
   describe('Given an exciting emoji component', () => {
