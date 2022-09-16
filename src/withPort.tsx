@@ -9,10 +9,15 @@ export const withPort = <P extends object>(ThingToWrap: ComponentType<P>) => {
       const { port, ...rest } = props
       this.port = port
       this.state = { props: rest }
-      this.port.addEventListener('message', this.handleChange)
     }
+
     componentDidMount = () => {
+      this.port.addEventListener('message', this.handleChange)
       this.port.start()
+    }
+
+    componentWillUnmount = () => {
+      this.port.removeEventListener('message', this.handleChange)
     }
 
     handleChange = ({data:props}) => {
