@@ -1,6 +1,6 @@
 import React, { ComponentType } from "react"
 import { act, render } from "@testing-library/react"
-import { MessageChannel,MessagePort } from 'worker_threads'
+import { MessageChannel, MessagePort } from 'worker_threads'
 import { withPort } from "./withPort"
 
 const awaitTimeout = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))
@@ -24,6 +24,18 @@ describe('withPort', () => {
         const { port1, port2 } = new MessageChannel()
         emojiPort = port1
         backendPort = port2
+      })
+      describe('When a component that already has a "port" property is wrapped with withPort', () => {
+        let WrappedComponent
+        beforeEach(() => {
+          const UnfortunateComponent = ({ port, whatever }) => <div>I want to talk about {port}. {whatever}</div>
+          WrappedComponent = withPort(UnfortunateComponent as ComponentType<{whatever: string}>)
+        })
+        it('should not let us do that', () => {
+          expect(() => {
+            render(<WrappedComponent port={emojiPort} whatever="whatever" />)
+          }).toThrow()
+        })
       })
       describe('When the component is wrapped with withPort', () => {
         let PortHappyEmoji

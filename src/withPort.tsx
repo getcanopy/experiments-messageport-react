@@ -1,10 +1,11 @@
 import React, { Component, ComponentType } from "react"
 
-export const withPort = <P extends object>(ThingToWrap: ComponentType<P>) => {
-  return class extends Component<P & {port:MessagePort}> {
+type StuffWithoutPort = Omit<object, 'port'>
+export const withPort = (ThingToWrap: ComponentType<StuffWithoutPort>) => {
+  return class extends Component<StuffWithoutPort & {port:MessagePort}> {
     port: MessagePort
-    state: { props: any }
-    constructor(props: P & {port:MessagePort}) {
+    state: { props: StuffWithoutPort }
+    constructor(props: StuffWithoutPort & {port:MessagePort}) {
       super(props)
       const { port, ...rest } = props
       this.port = port
