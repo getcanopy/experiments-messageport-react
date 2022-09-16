@@ -54,7 +54,7 @@ describe('withPort', () => {
             beforeEach(async () => {
               await act(async () => {
                 backendPort.postMessage({ emoji: '⭐' })
-                await awaitTimeout(100)
+                await awaitTimeout(0)
               })
             })
             it('should update the element emoji', () => {
@@ -68,7 +68,7 @@ describe('withPort', () => {
             beforeEach(async () => {
               await act(async () => {
                 backendPort.postMessage({ emoji: '🆒', greeting: 'sup sis' })
-                await awaitTimeout(100)
+                await awaitTimeout(0)
               })
             })
             it('should update the element emoji and greeting', () => {
