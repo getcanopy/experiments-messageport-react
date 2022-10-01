@@ -1,8 +1,10 @@
 import React, { ReactElement, useEffect, useState, createContext, useContext } from "react"
 
-const PortPortalContext = createContext<Record<string, any>>({})
+type PortPortalData = Record<string, any>;
 
-export const usePortPortal = useContext(PortPortalContext)
+const PortPortalContext = createContext<PortPortalData>({})
+
+export const usePortPortal = () => useContext(PortPortalContext)
 
 interface PortPortalProps {
   port: MessagePort;
