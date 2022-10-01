@@ -16,12 +16,17 @@ setInterval(() => {
   port2.postMessage({ time: `${new Date().getHours()}:${new Date().getMinutes()}:${new Date().getSeconds()}:${new Date().getMilliseconds()}` })
 }, 100)
 
+setInterval(() => {
+  port2.postMessage({ message: 'Nested Yo!', color: `rgb(${Math.random() * 255}, ${Math.random() * 255}, ${Math.random() * 255})` })
+}, 500)
+
 function App() {
   return (
     <PortPortal port={port1}>
       <HappyGreeting />
       <SomethingElse onClick={() => console.log('clicked')} />
       <AnothaOne />
+      <ColorMessage />
     </PortPortal>
   )
 }
@@ -52,6 +57,40 @@ const AnothaOne = ({ time }: any) => {
   return (
     <div>
       <span>{time}</span>
+    </div>
+  )
+}
+
+const ColorMessage = () => {
+  return (
+    <div>
+      <NestedColorMessage1 />
+    </div>
+  )
+}
+
+const NestedColorMessage1 = () => {
+  return (
+    <div>
+      <NestedColorMessage2 />
+    </div>
+  )
+}
+
+const NestedColorMessage2 = () => {
+  return (
+    <div>
+      <NestedColorMessage3 />
+    </div>
+  )
+}
+
+const NestedColorMessage3 = () => {
+  const { message, color } = usePortPortal()
+
+  return (
+    <div>
+      <span style={{ color, fontSize: 36 }}>{message}</span>
     </div>
   )
 }
