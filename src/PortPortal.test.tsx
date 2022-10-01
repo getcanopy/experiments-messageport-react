@@ -100,9 +100,9 @@ describe('PortPortal', () => {
                 await awaitTimeout(0)
               })
             })
-            it('should be the default value', () => {
-              expect(rendered.container).toHaveTextContent('😎')
-              expect(rendered.container).toHaveTextContent('sup bro')
+            it('should be the updated message', () => {
+              expect(rendered.container).toHaveTextContent('🦖')
+              expect(rendered.container).toHaveTextContent('yo dawg')
             })
           })
         })
