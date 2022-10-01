@@ -1,22 +1,7 @@
 import React from 'react'
+import { PortPortal, usePortPortal } from './PortPortal'
 import './App.css'
-import { PortPortal, usePortPortal } from './PortPortalFunctional'
 
-const HappyGreeting = () => {
-  const { greeting, emoji } = usePortPortal()
-
-  return <div>
-    <span>{emoji}</span>
-    <span>{greeting}</span>
-    <span>{emoji}</span>
-  </div>
-}
-
-const SomethingElse = ({ bgColor, onClick }) => {
-  return <div style={{ backgroundColor: bgColor }}>
-    <button onClick={onClick}>Click me!</button>
-  </div>
-}
 const { port1, port2 } = new MessageChannel()
 
 setInterval(() => {
@@ -32,10 +17,32 @@ function App() {
     <PortPortal port={port1}>
       <div className="App">
         <HappyGreeting />
-        <SomethingElse bgColor='blue' onClick={() => console.log('clicked')} />
+        <SomethingElse onClick={() => console.log('clicked')} />
       </div>
     </PortPortal>
   )
 }
 
 export default App
+
+const HappyGreeting = () => {
+  const { greeting, emoji } = usePortPortal()
+
+  return (
+    <div>
+      <span>{emoji}</span>
+      <span>{greeting}</span>
+      <span>{emoji}</span>
+    </div>
+  )
+}
+
+const SomethingElse = ({ onClick }) => {
+  const { bgColor } = usePortPortal()
+
+  return (
+    <div style={{ backgroundColor: bgColor }}>
+      <button onClick={onClick}>Click me!</button>
+    </div>
+  )
+}
