@@ -1,7 +1,8 @@
 import React, { ComponentType } from "react"
 import { act, render } from "@testing-library/react"
 import { PortPortal } from "./PortPortal"
-import {MessageChannel} from 'worker_threads'
+import { MessageChannel } from 'worker_threads'
+
 const awaitTimeout = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))
 
 describe('PortPortal', () => {

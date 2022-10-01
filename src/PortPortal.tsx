@@ -29,7 +29,9 @@ export const PortPortal = ({ port, children }: PortPortalProps) => {
 
   return (
     <PortPortalContext.Provider value={props}>
-      {children}
+      {Array.isArray(children)
+        ? children.map((c) => React.cloneElement(c, { ...props }))
+        : React.cloneElement(children, { ...props })}
     </PortPortalContext.Provider>
   )
 }
