@@ -4,6 +4,8 @@ import './App.css'
 
 const { port1, port2 } = new MessageChannel()
 
+const { port1: port3, port2: port4 } = new MessageChannel()
+
 setInterval(() => {
   port2.postMessage({ greeting: `hello from time: ${Date.now()}` })
 }, 100)
@@ -17,7 +19,7 @@ setInterval(() => {
 }, 100)
 
 setInterval(() => {
-  port2.postMessage({ message: 'Nested Yo!', color: `rgb(${Math.random() * 255}, ${Math.random() * 255}, ${Math.random() * 255})` })
+  port4.postMessage({ message: 'Nested Yo!', color: `rgb(${Math.random() * 255}, ${Math.random() * 255}, ${Math.random() * 255})` })
 }, 500)
 
 function App() {
@@ -26,7 +28,10 @@ function App() {
       <HappyGreeting />
       <SomethingElse onClick={() => console.log('clicked')} />
       <AnothaOne />
-      <ColorMessage />
+
+      <PortPortal port={port3}>
+        <ColorMessage />
+      </PortPortal>
     </PortPortal>
   )
 }
