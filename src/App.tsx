@@ -14,7 +14,7 @@ setInterval(() => {
 
 setInterval(() => {
   port2.postMessage({ time: `${new Date().getHours()}:${new Date().getMinutes()}:${new Date().getSeconds()}:${new Date().getMilliseconds()}` })
-}, 1000)
+}, 100)
 
 function App() {
   return (
