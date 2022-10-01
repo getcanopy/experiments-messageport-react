@@ -113,6 +113,18 @@ describe('PortPortal', () => {
               expect(rendered.container).toHaveTextContent("it's partyo'clock")
             })
           })
+          describe('when the backend sends an undefined message', () => {
+            beforeEach(async () => {
+              await act(async () => {
+                backendPort.postMessage(undefined)
+                await awaitTimeout(0)
+              })
+            })
+            it('should be the default value', () => {
+              expect(rendered.container).toHaveTextContent('😎')
+              expect(rendered.container).toHaveTextContent("it's loading...o'clock")
+            })
+          })
         })
       })
     })
