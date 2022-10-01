@@ -15,10 +15,8 @@ setInterval(() => {
 function App() {
   return (
     <PortPortal port={port1}>
-      <div className="App">
-        <HappyGreeting />
-        <SomethingElse onClick={() => console.log('clicked')} />
-      </div>
+      <HappyGreeting />
+      <SomethingElse onClick={() => console.log('clicked')} />
     </PortPortal>
   )
 }
@@ -37,9 +35,7 @@ const HappyGreeting = () => {
   )
 }
 
-const SomethingElse = ({ onClick }) => {
-  const { bgColor } = usePortPortal()
-
+const SomethingElse = ({ bgColor, onClick }: any) => {
   return (
     <div style={{ backgroundColor: bgColor }}>
       <button onClick={onClick}>Click me!</button>
