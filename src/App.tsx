@@ -12,11 +12,16 @@ setInterval(() => {
   port2.postMessage({ bgColor: `rgb(${Math.random() * 255}, ${Math.random() * 255}, ${Math.random() * 255})` })
 }, 1000)
 
+setInterval(() => {
+  port2.postMessage({ time: `${new Date().getHours()}:${new Date().getMinutes()}:${new Date().getSeconds()}:${new Date().getMilliseconds()}` })
+}, 1000)
+
 function App() {
   return (
     <PortPortal port={port1}>
       <HappyGreeting />
       <SomethingElse onClick={() => console.log('clicked')} />
+      <AnothaOne />
     </PortPortal>
   )
 }
@@ -39,6 +44,14 @@ const SomethingElse = ({ bgColor, onClick }: any) => {
   return (
     <div style={{ backgroundColor: bgColor }}>
       <button onClick={onClick}>Click me!</button>
+    </div>
+  )
+}
+
+const AnothaOne = ({ time }: any) => {
+  return (
+    <div>
+      <span>{time}</span>
     </div>
   )
 }
