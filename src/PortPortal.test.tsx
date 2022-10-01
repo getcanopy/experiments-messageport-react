@@ -67,6 +67,18 @@ describe('PortPortal', () => {
               expect(rendered.container).toHaveTextContent('sup sis')
             })
           })
+          describe('when the backend sends an undefined message', () => {
+            beforeEach(async () => {
+              await act(async () => {
+                backendPort.postMessage(undefined)
+                await awaitTimeout(0)
+              })
+            })
+            it('should be the default value', () => {
+              expect(rendered.container).toHaveTextContent('😎')
+              expect(rendered.container).toHaveTextContent('sup bro')
+            })
+          })
         })
       })
       describe('When 2 components are wrapped with PortPortal', () => {
@@ -111,18 +123,6 @@ describe('PortPortal', () => {
             it('should update the element emoji and greeting', () => {
               expect(rendered.container).toHaveTextContent('🆒')
               expect(rendered.container).toHaveTextContent("it's partyo'clock")
-            })
-          })
-          describe('when the backend sends an undefined message', () => {
-            beforeEach(async () => {
-              await act(async () => {
-                backendPort.postMessage(undefined)
-                await awaitTimeout(0)
-              })
-            })
-            it('should be the default value', () => {
-              expect(rendered.container).toHaveTextContent('😎')
-              expect(rendered.container).toHaveTextContent("it's loading...o'clock")
             })
           })
         })
