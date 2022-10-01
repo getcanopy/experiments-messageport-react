@@ -79,6 +79,32 @@ describe('PortPortal', () => {
               expect(rendered.container).toHaveTextContent('sup bro')
             })
           })
+          describe('when the backend sends two messages', () => {
+            beforeEach(async () => {
+              await act(async () => {
+                backendPort.postMessage(undefined)
+                backendPort.postMessage({ emoji: '🦖', greeting: 'yo dawg' })
+                await awaitTimeout(0)
+              })
+            })
+            it('should be the updated message', () => {
+              expect(rendered.container).toHaveTextContent('🦖')
+              expect(rendered.container).toHaveTextContent('yo dawg')
+            })
+          })
+          describe('when the backend sends two messages (final one is undefined)', () => {
+            beforeEach(async () => {
+              await act(async () => {
+                backendPort.postMessage({ emoji: '🦖', greeting: 'yo dawg' })
+                backendPort.postMessage(undefined)
+                await awaitTimeout(0)
+              })
+            })
+            it('should be the default value', () => {
+              expect(rendered.container).toHaveTextContent('😎')
+              expect(rendered.container).toHaveTextContent('sup bro')
+            })
+          })
         })
       })
       describe('When 2 components are wrapped with PortPortal', () => {
