@@ -15,7 +15,7 @@ export const PortPortal = ({ port, children }: PortPortalProps) => {
   const [props, setProps] = useState<Record<string, any>>({})
 
   const handleChange = ({ data }) => {
-    setProps({ ...props, ...data })
+    setProps((p) => ({ ...p, ...data }))
   }
 
   useEffect(() => {
