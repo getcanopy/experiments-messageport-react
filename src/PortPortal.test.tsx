@@ -1,7 +1,8 @@
 import React, { ComponentType } from "react"
 import { act, render } from "@testing-library/react"
 import { PortPortal } from "./PortPortal"
-import {MessageChannel} from 'worker_threads'
+import { MessageChannel } from 'worker_threads'
+
 const awaitTimeout = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))
 
 describe('PortPortal', () => {
@@ -64,6 +65,44 @@ describe('PortPortal', () => {
             it('should update the element emoji and greeting', () => {
               expect(rendered.container).toHaveTextContent('🆒')
               expect(rendered.container).toHaveTextContent('sup sis')
+            })
+          })
+          describe('when the backend sends an undefined message', () => {
+            beforeEach(async () => {
+              await act(async () => {
+                backendPort.postMessage(undefined)
+                await awaitTimeout(0)
+              })
+            })
+            it('should be the default value', () => {
+              expect(rendered.container).toHaveTextContent('😎')
+              expect(rendered.container).toHaveTextContent('sup bro')
+            })
+          })
+          describe('when the backend sends two messages', () => {
+            beforeEach(async () => {
+              await act(async () => {
+                backendPort.postMessage(undefined)
+                backendPort.postMessage({ emoji: '🦖', greeting: 'yo dawg' })
+                await awaitTimeout(0)
+              })
+            })
+            it('should be the updated message', () => {
+              expect(rendered.container).toHaveTextContent('🦖')
+              expect(rendered.container).toHaveTextContent('yo dawg')
+            })
+          })
+          describe('when the backend sends two messages (final one is undefined)', () => {
+            beforeEach(async () => {
+              await act(async () => {
+                backendPort.postMessage({ emoji: '🦖', greeting: 'yo dawg' })
+                backendPort.postMessage(undefined)
+                await awaitTimeout(0)
+              })
+            })
+            it('should be the updated message', () => {
+              expect(rendered.container).toHaveTextContent('🦖')
+              expect(rendered.container).toHaveTextContent('yo dawg')
             })
           })
         })

@@ -1,27 +1,37 @@
-import React, { ReactElement } from "react"
+import React, { ReactElement, useEffect, useState, createContext, useContext } from "react"
 
-class PortPortal extends React.Component<{ port: MessagePort, children: ReactElement | ReactElement[] }> {
-  port: MessagePort
-  state: { props: any }
-  constructor(props) {
-    super(props)
-    const { port } = props
-    this.port = port
-    this.state = { props: {} }
-  }
-  componentDidMount = () => {
-    this.props.port.addEventListener("message", this.handleChange)
-    this.props.port.start()
-  }
-  componentWillUnmount = () => {
-    this.props.port.removeEventListener("message", this.handleChange)
-  }
-  handleChange = ({ data: props }) => {
-    this.setState({ props: { ...this.state.props, ...props } })
-  }
-  render = () => {
-    const { children } = this.props
-    return React.Children.map(children, (child) => React.cloneElement(child, this.state.props))
-  }
+type PortPortalData = Record<string, any>;
+
+const PortPortalContext = createContext<PortPortalData>({})
+
+export const usePortPortal = () => useContext(PortPortalContext)
+
+interface PortPortalProps {
+  port: MessagePort;
+  children: ReactElement | ReactElement[];
 }
-export { PortPortal }
+
+export const PortPortal = ({ port, children }: PortPortalProps) => {
+  const [props, setProps] = useState<Record<string, any>>({})
+
+  const handleChange = ({ data }) => {
+    setProps((p) => ({ ...p, ...data }))
+  }
+
+  useEffect(() => {
+    port.addEventListener("message", handleChange)
+    port.start()
+
+    return () => {
+      port.removeEventListener("message", handleChange)
+    }
+  }, [])
+
+  return (
+    <PortPortalContext.Provider value={props}>
+      {Array.isArray(children)
+        ? children.map((c, i) => React.cloneElement(c, { key: i, ...props }))
+        : React.cloneElement(children, { ...props })}
+    </PortPortalContext.Provider>
+  )
+}
