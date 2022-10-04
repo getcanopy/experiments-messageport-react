@@ -29,6 +29,7 @@ export const PortPortal = ({ port, children }: PortPortalProps) => {
 
   return (
     <PortPortalContext.Provider value={props}>
+      //TODO: This looks like it's clobbering the key prop
       {Array.isArray(children)
         ? children.map((c, i) => React.cloneElement(c, { key: i, ...props }))
         : React.cloneElement(children, { ...props })}
